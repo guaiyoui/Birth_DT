@@ -56,11 +56,11 @@ y_head = ['qka205']
 x_var = data[x_head].values # 自变量
 y_var = data[y_head].values # 因变量
 
-for i in x_head:
-    print(i, data[i].unique())
+# for i in x_head:
+#     print(i, data[i].unique())
 
 # 可以调整这边的criterion参数来选择不同的算法，比如entropy或者gini
-model = dtc(criterion = 'entropy', max_depth = 5)
+model = dtc(criterion = 'gini', max_depth = 5)
 
 model.fit(x_var, y_var)
 
@@ -86,8 +86,11 @@ plt.savefig("tree_visualization.pdf", dpi=600, bbox_inches='tight')
 
 # 计算准确率
 x_train, x_test, y_train, y_test = train_test_split(x_var, y_var, test_size = 0.2, random_state = 0)
-tree = dtc(criterion = 'entropy', max_depth = 5)
+tree = dtc(criterion = 'gini', max_depth = 5)
 tree.fit(x_train, y_train)
 pred_model = tree.predict(x_test)
 print('Accuracy of the model is {:.0%}'.format(accuracy_score(y_test, pred_model)))
 
+feature_importance = tree.tree_.compute_feature_importances(normalize=False)
+
+print('feature importance', feature_importance)
